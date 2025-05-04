@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Sidebar() {
@@ -10,7 +9,6 @@ export default function Sidebar() {
     { to: "/dashboard", label: "Dashboard", icon: DashboardIcon },
     { to: "/customers", label: "Customers", icon: PeopleIcon },
     { to: "/add-customer", label: "Add Customer", icon: AddCircleIcon },
-    { to: "/loans", label: "Loans", icon: ReceiptLongIcon },
   ];
 
   return (
@@ -43,7 +41,7 @@ export default function Sidebar() {
           onClick={() => {
             /* TODO: logout logic */
           }}
-          className="w-full flex items-center justify-center px-4 py-2 bg-red-200 text-red-700 rounded-lg hover:bg-red-100"
+          className="flex items-center justify-center px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-red-200 hover:text-red-700"
         >
           <LogoutIcon className="mr-2" fontSize="small" />
           Log out

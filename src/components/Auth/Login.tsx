@@ -20,11 +20,11 @@ export default function Login() {
     <div
       style={{
         backgroundImage: `url(${bgImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        transform: "scale(0.97)",
+        backgroundSize: "75% auto",
+        backgroundPosition: "center left",
+        transform: "scale(0.94)",
+        transformOrigin: "center center",
         borderRadius: "10px",
-        filter: "contrast(0.75) brightness(1.1)",
       }}
       className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-200 to-teal-300 px-4"
     >

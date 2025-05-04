@@ -7,6 +7,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { exportCustomerPDF } from "../../utils/exportPdf";
 
 const mockCustomers = [
   {
@@ -164,6 +165,29 @@ const mockCustomers = [
       { id: 702, type: "repayment", amount: 250, date: "2025-04-25" },
     ],
   },
+  {
+    id: 8,
+    name: "Ram",
+    contact: { email: "ram@example.com", phone: "+91 95678 90123" },
+    address: "14 Hill Rd, Bhubaneswar, Odisha",
+    joinDate: "2023-12-10",
+    totalCredit: 1500,
+    balance: 750,
+    dueDate: "2025-05-02",
+    status: "Overdue",
+    transactions: [
+      {
+        id: 701,
+        type: "loan",
+        item: "Paneer (1 kg)",
+        amount: 500,
+        date: "2025-04-02",
+        dueDate: "2025-05-02",
+        status: "Overdue",
+      },
+      { id: 702, type: "repayment", amount: 250, date: "2025-04-25" },
+    ],
+  },
 ];
 
 type FormType = "customer" | "loan" | "payment" | null;
@@ -200,7 +224,7 @@ export default function Dashboard() {
                   <span
                     className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${
                       selectedCustomer.status === "Overdue"
-                        ? "bg-red-100 text-red-700"
+                        ? "bg-orange-100 text-orange-700"
                         : "bg-green-100 text-green-700"
                     }`}
                   >
@@ -259,10 +283,8 @@ export default function Dashboard() {
       </div>
       <div className="mt-3">
         <button
-          onClick={() => {
-            /* TODO: PDF export logic to be written*/
-          }}
-          className="flex items-center bg-teal-600 text-white px-3 py-1.5 rounded-lg hover:bg-teal-700 transition"
+          onClick={() => exportCustomerPDF(selectedCustomer)}
+          className="flex items-center bg-teal-600 text-white px-2 py-1.5 rounded-lg text-sm hover:bg-teal-700 transition"
         >
           <PictureAsPdfIcon fontSize="small" className="mr-2" />
           Export
@@ -401,7 +423,7 @@ export default function Dashboard() {
                       <span
                         className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full ${
                           c.status === "Overdue"
-                            ? "bg-red-100 text-red-700"
+                            ? "bg-orange-100 text-orange-700"
                             : "bg-green-100 text-green-700"
                         }`}
                       >

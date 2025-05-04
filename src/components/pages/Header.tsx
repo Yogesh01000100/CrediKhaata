@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Header() {
@@ -9,9 +10,8 @@ export default function Header() {
   return (
     <header className="bg-teal-600  text-white px-6 py-2 flex items-center justify-between shadow-sm">
       <div className="flex items-center space-x-2">
-        <span className="text-xl font-semibold tracking-tight">
-          CrediKhaata
-        </span>
+        <ReceiptLongIcon className="text-white" fontSize="medium" />
+        <span className="text-xl font-bold tracking-tight">CrediKhaata</span>
       </div>
 
       <div className="flex items-center space-x-4">
