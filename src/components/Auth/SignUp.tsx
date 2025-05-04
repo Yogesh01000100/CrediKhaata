@@ -20,9 +20,9 @@ export default function Signup() {
     <div
       style={{
         backgroundImage: `url(${bgImage})`,
-        backgroundSize: "75% auto",
-        backgroundPosition: "center left",
-        transform: "scale(0.94)",
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+        transform: "scale(0.92)",
         transformOrigin: "center center",
         borderRadius: "10px",
       }}

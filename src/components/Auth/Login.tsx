@@ -1,28 +1,48 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import bgImage from "../../assets/login.png";
+import { HashLoader } from "react-spinners";
+import { toast } from "sonner";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: real auth
-    navigate("/dashboard");
+    setLoading(true);
+
+    try {
+      const response = await axios.post("https://dummyjson.com/auth/login", {
+        username: form.username,
+        password: form.password,
+      });
+
+      const { accessToken } = response.data;
+      localStorage.setItem("authToken", accessToken);
+      toast.success("Login successful!");
+      navigate("/dashboard");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div
       style={{
         backgroundImage: `url(${bgImage})`,
-        backgroundSize: "75% auto",
-        backgroundPosition: "center left",
-        transform: "scale(0.94)",
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+        transform: "scale(0.92)",
         transformOrigin: "center center",
         borderRadius: "10px",
       }}
@@ -39,16 +59,16 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="relative">
             <input
-              type="email"
-              name="email"
-              value={form.email}
+              type="text"
+              name="username"
+              value={form.username}
               onChange={handleChange}
               required
-              placeholder="Email"
+              placeholder="Username"
               className="peer w-full px-4 pt-5 pb-2 border rounded-lg focus:outline-none placeholder-transparent"
             />
             <label className="pointer-events-none absolute left-4 top-2 text-xs text-teal-500 transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-sm">
-              Email address
+              Username
             </label>
           </div>
 
@@ -69,9 +89,19 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition"
+            disabled={loading}
+            className="w-full py-2 rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Sign In
+            {loading ? (
+              <div className="flex justify-center">
+                <div>
+                  <HashLoader color="#ffffff" size={20} />
+                </div>{" "}
+                <div className="ml-2">Please Wait</div>
+              </div>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 
