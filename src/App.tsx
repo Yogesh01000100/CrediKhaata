@@ -1,8 +1,29 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import Header from "./components/pages/Header";
+import Sidebar from "./components/pages/SideBar";
 import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/SignUp";
-import Dashboard from "./components/pages/dashBoard";
-import CustomerDetail from "./components/pages/customerDetails";
+import Dashboard from "./components/pages/Board";
+
+function SecureLayout() {
+  return (
+    <div className="flex flex-col h-screen">
+      <Header />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar />
+        <main className="flex-1 overflow-auto">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   return (
@@ -10,8 +31,11 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/customer/:id" element={<CustomerDetail />} />
+
+        <Route element={<SecureLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

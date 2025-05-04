@@ -6,10 +6,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LightModeIcon from "@mui/icons-material/LightMode";
-
-import LogoutIcon from "@mui/icons-material/Logout";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const mockCustomers = [
   {
@@ -174,7 +171,6 @@ type Customer = (typeof mockCustomers)[0];
 
 export default function Dashboard() {
   const [expandedForm, setExpandedForm] = useState<FormType>(null);
-  const [dark, setDark] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>(
     mockCustomers[0]
   );
@@ -197,6 +193,7 @@ export default function Dashboard() {
               <div className="mr-1">
                 <AccountCircleIcon className="text-teal-600" fontSize="large" />
               </div>
+
               <div>
                 <div className="text-teal-600">{selectedCustomer.name}</div>
                 <div>
@@ -255,16 +252,22 @@ export default function Dashboard() {
             {selectedCustomer.totalCredit}
           </p>
           <p className="text-sm">
-            <span className="font-medium">Balance:</span> ₹
-            {selectedCustomer.balance}
-          </p>
-          <p className="text-sm">
             <span className="font-medium">Next Due:</span>{" "}
             {selectedCustomer.dueDate}
           </p>
         </div>
       </div>
-
+      <div className="mt-3">
+        <button
+          onClick={() => {
+            /* TODO: PDF export logic to be written*/
+          }}
+          className="flex items-center bg-teal-600 text-white px-3 py-1.5 rounded-lg hover:bg-teal-700 transition"
+        >
+          <PictureAsPdfIcon fontSize="small" className="mr-2" />
+          Export
+        </button>
+      </div>
       <hr className="border-t-2 border-dashed border-gray-300 my-5" />
       <div className="mt-4">
         <h4 className="text-lg font-semibold text-gray-900 mb-4">
@@ -335,52 +338,27 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-teal-600  text-white px-6 py-2 flex items-center justify-between shadow-sm">
-        <div className="flex items-center space-x-2">
-          <span className="text-xl font-semibold tracking-tight">
-            CrediKhaata
-          </span>
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => setDark(!dark)}
-            className="px-2 py-1 rounded-full hover:bg-teal-500 transition"
-            aria-label="Toggle dark mode"
-          >
-            {dark ? (
-              <LightModeIcon fontSize="small" className="text-white" />
-            ) : (
-              <DarkModeIcon fontSize="small" className="text-white" />
-            )}
-          </button>
-
-          <button
-            onClick={() => {
-              /* TODO: logout logic */
-            }}
-            className="px-2 py-1 rounded-full hover:bg-teal-500 transition"
-            aria-label="Log out"
-          >
-            <LogoutIcon fontSize="small" className="text-white" />
-          </button>
-        </div>
-      </header>
-
       <main className="container mx-auto px-6 py-8 flex flex-col lg:flex-row lg:space-x-8">
         <section className="flex-1 mb-8 lg:mb-0">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-teal-700">Customers</h2>
-            <button
-              onClick={() => {
-                /* TODO: PDF export logic to be written*/
-              }}
-              className="flex items-center bg-teal-600 text-white px-4 py-2 rounded-xl hover:bg-teal-700 transition"
-            >
-              <PictureAsPdfIcon fontSize="small" className="mr-2" />
-              Export PDF
-            </button>
+          <div className="flex mb-5">
+            <div className=" bg-white rounded-lg shadow-md p-4 flex flex-col space-y-3">
+              <div className="flex items-center space-x-1.5">
+                <InfoOutlinedIcon className="text-teal-600" fontSize="small" />
+                <h4 className="text-teal-700 font-bold text-md">
+                  Welcome to CrediKhaata!
+                </h4>
+              </div>
+              <p className="text-gray-700 text-xs">
+                CrediKhaata is your one-stop ledger for tracking credit sales
+                and repayments. Easily add customers, record loans, and view
+                outstanding balances all in a simple dashboard so you can focus
+                on running your shop, while we handle the numbers.
+              </p>
+            </div>
           </div>
+
+          <div className="text-2xl font-bold text-teal-700 mb-4">Customers</div>
+
           <div className="overflow-x-auto bg-white rounded-lg shadow">
             <table className="min-w-full">
               <thead className="bg-teal-100">
