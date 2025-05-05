@@ -54,10 +54,12 @@ export default function Header() {
           )}
         </button>
 
-        <AccountCircleIcon
-          fontSize="large"
-          className="text-white dark:text-gray-300 cursor-pointer hover:text-teal-100 dark:hover:text-gray-100 transition-colors"
-        />
+        <div className="hidden md:inline-flex">
+          <AccountCircleIcon
+            fontSize="large"
+            className="text-white dark:text-gray-300 cursor-pointer hover:text-teal-100 dark:hover:text-gray-100 transition-colors"
+          />
+        </div>
 
         <button
           onClick={handleLogout}
