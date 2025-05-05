@@ -1,3 +1,4 @@
+// src/components/forms/RecordRepaymentForm.tsx
 import React, { useState } from "react";
 import { Transaction } from "../pages/Board";
 
@@ -6,18 +7,31 @@ type Props = {
 };
 
 export default function RecordRepaymentForm({ onSubmit }: Props) {
-  const [amount, setAmount] = useState<number>(0);
-  const [date, setDate] = useState("");
+  const [amount, setAmount] = useState<string>(""); // start empty
+  const [date, setDate] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newRepayment: Transaction = {
+
+    // parse + validate
+    const amt = parseFloat(amount);
+    if (isNaN(amt) || amt <= 0) {
+      return alert("Please enter a valid repayment amount greater than 0");
+    }
+    if (!date) {
+      return alert("Please select a date for the repayment");
+    }
+
+    onSubmit({
       id: Date.now(),
       type: "repayment",
-      amount,
+      amount: amt,
       date,
-    };
-    onSubmit(newRepayment);
+    });
+
+    // reset
+    setAmount("");
+    setDate("");
   };
 
   return (
@@ -26,10 +40,11 @@ export default function RecordRepaymentForm({ onSubmit }: Props) {
         type="number"
         placeholder="Repayment Amount"
         value={amount}
-        onChange={(e) => setAmount(+e.target.value)}
+        onChange={(e) => setAmount(e.target.value)}
         required
         className="block w-full border p-2 rounded"
       />
+
       <input
         type="date"
         value={date}
@@ -37,9 +52,10 @@ export default function RecordRepaymentForm({ onSubmit }: Props) {
         required
         className="block w-full border p-2 rounded"
       />
+
       <button
         type="submit"
-        className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700"
+        className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700 transition"
       >
         Record Repayment
       </button>

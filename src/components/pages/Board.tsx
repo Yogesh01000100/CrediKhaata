@@ -14,7 +14,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 export interface Transaction {
@@ -336,7 +336,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300 text-sm">
         <div className="space-y-2">
           <p>
             <strong>Joined:</strong> {selectedCustomer.joinDate}
@@ -368,7 +368,7 @@ export default function Dashboard() {
 
       <hr className="border-t-2 border-dashed border-gray-300 dark:border-gray-600 my-5" />
 
-      <div>
+      <div className="text-sm">
         <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
           Transactions
         </h4>
@@ -470,10 +470,10 @@ export default function Dashboard() {
         <aside className="w-full lg:w-1/3 space-y-6">
           {renderCustomerCard()}
 
-          <div className="flex space-x-4">
+          <div className="flex space-x-6">
             <div
               onClick={() => setExpandedForm("customer")}
-              className="flex-1 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-center space-x-2 transition-colors cursor-pointer"
+              className="flex-1 bg-teal-200 dark:bg-gray-700 px-2 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
             >
               <PersonAddAltIcon className="text-teal-600 dark:text-teal-400" />
               <span className="font-medium text-gray-700 dark:text-gray-100">
@@ -482,9 +482,9 @@ export default function Dashboard() {
             </div>
             <div
               onClick={() => setExpandedForm("loan")}
-              className="flex-1 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-center space-x-2 transition-colors cursor-pointer"
+              className="flex-1 bg-teal-200 dark:bg-gray-700 px-2 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
             >
-              <MonetizationOnIcon className="text-teal-600 dark:text-teal-400" />
+              <ReceiptLongIcon className="text-teal-600 dark:text-teal-400" />
               <span className="font-medium text-gray-700 dark:text-gray-100">
                 Add Loan
               </span>
@@ -493,7 +493,7 @@ export default function Dashboard() {
 
           <div
             onClick={() => setExpandedForm("payment")}
-            className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
+            className="bg-teal-200 dark:bg-gray-700 px-3 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
           >
             <CurrencyRupeeIcon className="text-teal-600 dark:text-teal-400" />
             <span className="font-medium text-gray-700 dark:text-gray-100">

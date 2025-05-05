@@ -7,52 +7,64 @@ type Props = {
 
 export default function AddLoanForm({ onSubmit }: Props) {
   const [item, setItem] = useState("");
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState("");
   const [dueDate, setDueDate] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newLoan: Transaction = {
+    const amt = parseFloat(amount);
+    const dueTime = new Date(dueDate).getTime();
+    const now = Date.now();
+
+    onSubmit({
       id: Date.now(),
       type: "loan",
       item,
-      amount,
-      date: new Date().toISOString().slice(0, 10),
+      amount: amt,
+      date: new Date().toISOString().split("T")[0],
       dueDate,
-      status:
-        new Date(dueDate).getTime() < Date.now() ? "Overdue" : "Up-to-date",
-    };
-    onSubmit(newLoan);
+      status: dueTime < now ? "Overdue" : "Up-to-date",
+    });
+
+    setItem("");
+    setAmount("");
+    setDueDate("");
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <input
+        name="item"
         type="text"
-        placeholder="Item"
         value={item}
         onChange={(e) => setItem(e.target.value)}
+        placeholder="Item"
         required
-        className="block w-full border p-2 rounded"
+        className="w-full border p-2 rounded"
       />
+
       <input
+        name="amount"
         type="number"
-        placeholder="Amount"
         value={amount}
-        onChange={(e) => setAmount(+e.target.value)}
+        onChange={(e) => setAmount(e.target.value)}
+        placeholder="Amount"
         required
-        className="block w-full border p-2 rounded"
+        className="w-full border p-2 rounded"
       />
+
       <input
+        name="dueDate"
         type="date"
         value={dueDate}
         onChange={(e) => setDueDate(e.target.value)}
         required
-        className="block w-full border p-2 rounded"
+        className="w-full border p-2 rounded"
       />
+
       <button
         type="submit"
-        className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700"
+        className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700 transition"
       >
         Add Loan
       </button>
