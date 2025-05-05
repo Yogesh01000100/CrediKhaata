@@ -215,20 +215,20 @@ export default function Dashboard() {
     .filter((c) => c.status === "Overdue")
     .reduce((sum, c) => sum + c.balance, 0);
 
-  function handleSelectCustomer(c: Customer) {
+  const handleSelectCustomer = (c: Customer) => {
     setSelectedCustomer(c);
     setExpandedForm(null);
-  }
-  function closeForm() {
+  };
+  const closeForm = () => {
     setExpandedForm(null);
-  }
+  };
 
-  function handleAddCustomer(newCust: Customer) {
+  const handleAddCustomer = (newCust: Customer) => {
     setCustomers((prev) => [...prev, newCust]);
     setSelectedCustomer(newCust);
-  }
+  };
 
-  function handleAddLoan(loan: Transaction) {
+  const handleAddLoan = (loan: Transaction) => {
     setCustomers((prev) =>
       prev.map((c) =>
         c.id === selectedCustomer.id
@@ -246,9 +246,9 @@ export default function Dashboard() {
           : c
       )
     );
-  }
+  };
 
-  function handleAddRepayment(repay: Transaction) {
+  const handleAddRepayment = (repay: Transaction) => {
     setCustomers((prev) =>
       prev.map((c) =>
         c.id === selectedCustomer.id
@@ -261,7 +261,7 @@ export default function Dashboard() {
           : c
       )
     );
-  }
+  };
 
   const renderForm = () => {
     if (expandedForm === "customer") {
