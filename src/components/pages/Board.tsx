@@ -366,16 +366,21 @@ export default function Dashboard() {
             <table className="min-w-full">
               <thead className="bg-teal-100 dark:bg-teal-800">
                 <tr>
-                  {["Name", "Balance", "Next Due", "Status"].map((th) => (
-                    <th
-                      key={th}
-                      className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300"
-                    >
-                      {th}
-                    </th>
-                  ))}
+                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300">
+                    Balance
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300 hidden sm:table-cell">
+                    Next Due
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300">
+                    Status
+                  </th>
                 </tr>
               </thead>
+
               <tbody className="bg-white dark:bg-gray-700 divide-y divide-gray-200 dark:divide-gray-600 transition-colors">
                 {mockCustomers.map((c) => (
                   <tr
@@ -389,7 +394,7 @@ export default function Dashboard() {
                     <td className="px-6 py-4 text-gray-700 dark:text-gray-300 font-medium">
                       ₹{c.balance}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-sm">
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
                       {c.dueDate}
                     </td>
                     <td className="px-6 py-4">
