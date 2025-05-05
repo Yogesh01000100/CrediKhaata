@@ -6,7 +6,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { exportCustomerPDF } from "../../utils/exportPdf";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -16,6 +15,9 @@ import Button from "@mui/material/Button";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import PeopleIcon from "@mui/icons-material/People";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 export interface Transaction {
   id: number;
@@ -230,6 +232,12 @@ export default function Dashboard() {
   const [expandedForm, setExpandedForm] = useState<FormType>(null);
 
   const idx = customers.findIndex((c) => c.id === selectedCustomer.id);
+  const totalCustomers = customers.length;
+  const totalCreditGiven = customers.reduce((sum, c) => sum + c.totalCredit, 0);
+  const totalOutstanding = customers.reduce((sum, c) => sum + c.balance, 0);
+  const totalOverdue = customers
+    .filter((c) => c.status === "Overdue")
+    .reduce((sum, c) => sum + c.balance, 0);
 
   function handleSelectCustomer(c: Customer) {
     setSelectedCustomer(c);
@@ -395,20 +403,70 @@ export default function Dashboard() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-800 transition-colors">
       <main className="container mx-auto px-6 py-8 flex flex-col lg:flex-row lg:space-x-8">
         <section className="flex-1 mb-8 lg:mb-0">
-          <div className="flex mb-5">
-            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-4 flex flex-col space-y-3 transition-colors">
-              <div className="flex items-center space-x-1.5">
-                <InfoOutlinedIcon className="text-teal-600" fontSize="small" />
-                <h4 className="text-teal-700 dark:text-teal-300 font-bold text-md">
-                  Welcome to CrediKhaata!
-                </h4>
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="group relative bg-white/60 dark:bg-gray-600/60 backdrop-blur-md p-5 rounded-xl shadow transition-all">
+              <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-teal-500 animate-ping" />
+              <div className="flex items-center space-x-3">
+                <div className="px-2 py-1 rounded-full bg-teal-100 dark:bg-teal-900 group-hover:bg-teal-200 dark:group-hover:bg-teal-800 transition-colors">
+                  <PeopleIcon className="text-teal-600 text-xl" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
+                    Customers
+                  </p>
+                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-100">
+                    {totalCustomers}
+                  </p>
+                </div>
               </div>
-              <p className="text-gray-700 dark:text-gray-300 text-xs">
-                CrediKhaata is your one-stop ledger for tracking credit sales
-                and repayments. Easily add customers, record loans, and view
-                outstanding balances all in a simple dashboard so you can focus
-                on running your shop, while we handle the numbers.
-              </p>
+            </div>
+
+            <div className="group relative bg-white/60 dark:bg-gray-600/60 backdrop-blur-md p-5 rounded-xl shadow transition-all">
+              <div className="flex items-center space-x-3">
+                <div className="px-2 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900 group-hover:bg-yellow-200 dark:group-hover:bg-yellow-800 transition-colors">
+                  <MonetizationOnIcon className="text-yellow-600 text-xl" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
+                    Credit Given
+                  </p>
+                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-100">
+                    ₹{totalCreditGiven}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative bg-white/60 dark:bg-gray-600/60 backdrop-blur-md p-5 rounded-xl shadow transition-all">
+              <div className="flex items-center space-x-3">
+                <div className="px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900 group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+                  <CurrencyRupeeIcon className="text-blue-600 text-xl" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
+                    Outstanding
+                  </p>
+                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-100">
+                    ₹{totalOutstanding}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative bg-white/60 dark:bg-gray-600/60 backdrop-blur-md p-5 rounded-xl shadow transition-all">
+              <div className="flex items-center space-x-3">
+                <div className="px-2 py-1 rounded-full bg-red-100 dark:bg-red-900 group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
+                  <WarningAmberIcon className="text-red-600 text-xl" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
+                    Overdue
+                  </p>
+                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-red-400">
+                    ₹{totalOverdue}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
