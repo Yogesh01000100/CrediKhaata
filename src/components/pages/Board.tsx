@@ -418,7 +418,7 @@ export default function Dashboard() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full ${
+                        className={`inline-flex items-center px-1.5 py-1 text-xs font-semibold rounded-full ${
                           c.status === "Overdue"
                             ? "bg-orange-100 text-orange-700 dark:bg-orange-200 dark:text-orange-700"
                             : "bg-green-100 text-green-700 dark:bg-green-200 dark:text-green-700"

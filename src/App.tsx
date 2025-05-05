@@ -18,7 +18,9 @@ function SecureLayout() {
       <Header />
 
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
+        <aside className="hidden md:flex md:w-50">
+          <Sidebar />
+        </aside>
         <main className="flex-1 overflow-auto">
           <Outlet />
         </main>
