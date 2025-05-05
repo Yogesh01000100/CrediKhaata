@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import debounce from "lodash.debounce";
 import AddCustomerForm from "../forms/AddCustomerForm";
 import AddLoanForm from "../forms/AddLoanForm";
 import RecordRepaymentForm from "../forms/RecordRepaymentForm";
@@ -16,7 +17,8 @@ import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import PeopleIcon from "@mui/icons-material/People";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import ReportIcon from "@mui/icons-material/Report";
+import SearchIcon from "@mui/icons-material/Search";
 
 export interface Transaction {
   id: number;
@@ -214,6 +216,48 @@ export default function Dashboard() {
   const totalOverdue = customers
     .filter((c) => c.status === "Overdue")
     .reduce((sum, c) => sum + c.balance, 0);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredCustomers, setFilteredCustomers] =
+    useState<Customer[]>(customers);
+
+  const debouncedFilter = useMemo(
+    () =>
+      debounce((query: string) => {
+        const filtered = customers.filter((c) =>
+          c.name.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredCustomers(filtered);
+      }, 300),
+    [customers]
+  );
+
+  const highlightMatch = (text: string, query: string) => {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, "gi");
+    const parts = text.split(regex);
+    return (
+      <>
+        {parts.map((part, index) =>
+          part.toLowerCase() === query.toLowerCase() ? (
+            <mark
+              key={index}
+              className="bg-teal-200 dark:bg-teal-100 rounded px-1"
+            >
+              {part}
+            </mark>
+          ) : (
+            <span key={index}>{part}</span>
+          )
+        )}
+      </>
+    );
+  };
+
+  useEffect(() => {
+    debouncedFilter(searchQuery);
+    return debouncedFilter.cancel;
+  }, [searchQuery, debouncedFilter]);
 
   const handleSelectCustomer = (c: Customer) => {
     setSelectedCustomer(c);
@@ -432,7 +476,7 @@ export default function Dashboard() {
             <div className="group relative bg-white/60 dark:bg-gray-600/60 backdrop-blur-md p-5 rounded-xl shadow transition-all">
               <div className="flex items-center space-x-3">
                 <div className="px-2 py-1 rounded-full bg-red-100 dark:bg-red-900 group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
-                  <WarningAmberIcon className="text-red-500 text-xl" />
+                  <ReportIcon className="text-red-500 text-xl" />
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
@@ -446,9 +490,22 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="text-2xl font-bold text-teal-700 dark:text-teal-300 mb-4">
-            Customers
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-5 gap-4">
+            <h2 className="text-2xl font-bold text-teal-700 dark:text-teal-300">
+              Customers
+            </h2>
+            <div className="relative">
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-teal-400 dark:text-gray-300" />
+              <input
+                type="text"
+                placeholder="Enter user name"
+                className="pl-10 py-1.5 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-600 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-teal-500 transition"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
+
           <div className="overflow-x-auto bg-white dark:bg-gray-700 rounded-lg shadow transition-colors">
             <table className="min-w-full">
               <thead className="bg-teal-100 dark:bg-teal-800">
@@ -468,14 +525,14 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
-                {customers.map((c) => (
+                {filteredCustomers.map((c) => (
                   <tr
                     key={c.id}
                     onClick={() => handleSelectCustomer(c)}
                     className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                   >
                     <td className="px-6 py-3 font-semibold text-teal-700 dark:text-teal-300">
-                      {c.name}
+                      {highlightMatch(c.name, searchQuery)}
                     </td>
                     <td className="px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
                       ₹{c.balance}
