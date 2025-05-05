@@ -1,24 +1,32 @@
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Customer } from "../pages/Board";
 
 type Props = {
   onSubmit: (newCustomer: Customer) => void;
 };
 
-export default function AddCustomerForm({ onSubmit }: Props) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+type CustomerFormInputs = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+};
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+export default function AddCustomerForm({ onSubmit }: Props) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CustomerFormInputs>();
+
+  const handleFormSubmit = (data: CustomerFormInputs) => {
     const today = new Date().toISOString().slice(0, 10);
     const newCustomer: Customer = {
       id: Date.now(),
-      name,
-      contact: { email, phone },
-      address,
+      name: data.name,
+      contact: { email: data.email, phone: data.phone },
+      address: data.address,
       joinDate: today,
       totalCredit: 2000,
       balance: 0,
@@ -27,42 +35,53 @@ export default function AddCustomerForm({ onSubmit }: Props) {
       transactions: [],
     };
     onSubmit(newCustomer);
+    reset();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <input
-        type="text"
+        {...register("name", { required: "Name is required" })}
         placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        className="block w-full border p-2 rounded"
+        className="w-full border p-2 rounded"
       />
+      {errors.name && (
+        <p className="text-red-500 text-sm">{errors.name.message}</p>
+      )}
+
       <input
-        type="email"
+        {...register("email", {
+          required: "Email is required",
+          pattern: { value: /^\S+@\S+$/, message: "Invalid email" },
+        })}
         placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className="block w-full border p-2 rounded"
+        className="w-full border p-2 rounded"
       />
+      {errors.email && (
+        <p className="text-red-500 text-sm">{errors.email.message}</p>
+      )}
+
       <input
-        type="text"
+        {...register("phone", {
+          required: "Phone is required",
+          minLength: { value: 10, message: "Enter valid phone" },
+        })}
         placeholder="Phone"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        required
-        className="block w-full border p-2 rounded"
+        className="w-full border p-2 rounded"
       />
+      {errors.phone && (
+        <p className="text-red-500 text-sm">{errors.phone.message}</p>
+      )}
+
       <input
-        type="text"
+        {...register("address", { required: "Address is required" })}
         placeholder="Address"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-        required
-        className="block w-full border p-2 rounded"
+        className="w-full border p-2 rounded"
       />
+      {errors.address && (
+        <p className="text-red-500 text-sm">{errors.address.message}</p>
+      )}
+
       <button
         type="submit"
         className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700"

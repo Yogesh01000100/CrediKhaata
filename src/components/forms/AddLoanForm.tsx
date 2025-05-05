@@ -1,70 +1,78 @@
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Transaction } from "../pages/Board";
 
 type Props = {
   onSubmit: (loan: Transaction) => void;
 };
 
-export default function AddLoanForm({ onSubmit }: Props) {
-  const [item, setItem] = useState("");
-  const [amount, setAmount] = useState("");
-  const [dueDate, setDueDate] = useState("");
+type LoanFormInputs = {
+  item: string;
+  amount: string;
+  dueDate: string;
+};
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const amt = parseFloat(amount);
-    const dueTime = new Date(dueDate).getTime();
+export default function AddLoanForm({ onSubmit }: Props) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<LoanFormInputs>();
+
+  const handleFormSubmit = (data: LoanFormInputs) => {
+    const amount = parseFloat(data.amount);
     const now = Date.now();
+    const dueTime = new Date(data.dueDate).getTime();
 
     onSubmit({
       id: Date.now(),
       type: "loan",
-      item,
-      amount: amt,
+      item: data.item,
+      amount,
       date: new Date().toISOString().split("T")[0],
-      dueDate,
+      dueDate: data.dueDate,
       status: dueTime < now ? "Overdue" : "Up-to-date",
     });
 
-    setItem("");
-    setAmount("");
-    setDueDate("");
+    reset();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <input
-        name="item"
-        type="text"
-        value={item}
-        onChange={(e) => setItem(e.target.value)}
+        {...register("item", { required: "Item is required" })}
         placeholder="Item"
-        required
         className="w-full border p-2 rounded"
       />
+      {errors.item && (
+        <p className="text-red-500 text-sm">{errors.item.message}</p>
+      )}
 
       <input
-        name="amount"
         type="number"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        {...register("amount", {
+          required: "Amount is required",
+          min: { value: 1, message: "Enter a valid amount" },
+        })}
         placeholder="Amount"
-        required
         className="w-full border p-2 rounded"
       />
+      {errors.amount && (
+        <p className="text-red-500 text-sm">{errors.amount.message}</p>
+      )}
 
       <input
-        name="dueDate"
         type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-        required
+        {...register("dueDate", { required: "Due date is required" })}
         className="w-full border p-2 rounded"
       />
+      {errors.dueDate && (
+        <p className="text-red-500 text-sm">{errors.dueDate.message}</p>
+      )}
 
       <button
         type="submit"
-        className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700 transition"
+        className="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700"
       >
         Add Loan
       </button>

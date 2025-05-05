@@ -198,29 +198,6 @@ const initialCustomers: Customer[] = [
       { id: 702, type: "repayment", amount: 250, date: "2025-04-25" },
     ],
   },
-  {
-    id: 8,
-    name: "Ram",
-    contact: { email: "ram@example.com", phone: "+91 95678 90123" },
-    address: "14 Hill Rd, Bhubaneswar, Odisha",
-    joinDate: "2023-12-10",
-    totalCredit: 1500,
-    balance: 750,
-    dueDate: "2025-05-02",
-    status: "Overdue",
-    transactions: [
-      {
-        id: 701,
-        type: "loan",
-        item: "Paneer (1 kg)",
-        amount: 500,
-        date: "2025-04-02",
-        dueDate: "2025-05-02",
-        status: "Overdue",
-      },
-      { id: 702, type: "repayment", amount: 250, date: "2025-04-25" },
-    ],
-  },
 ];
 type FormType = "customer" | "loan" | "payment" | null;
 
