@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import bgImage from "../../assets/login.png";
 import { HashLoader } from "react-spinners";
 import { toast } from "sonner";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+
+interface LoginForm {
+  username: string;
+  password: string;
+}
 
 export default function Login() {
-  const [form, setForm] = useState({ username: "", password: "" });
-  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState<LoginForm>({ username: "", password: "" });
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setLoading(true);
 
@@ -28,12 +34,20 @@ export default function Login() {
       localStorage.setItem("authToken", accessToken);
       toast.success("Login successful!");
       navigate("/dashboard");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Login failed");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const copyToClipboard = (text: string, label: string): void => {
+    void navigator.clipboard.writeText(text);
+    toast.success(`${label} copied!`);
   };
 
   return (
@@ -56,7 +70,43 @@ export default function Login() {
           Secure login to your account
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <div className="mt-4 p-4 bg-teal-50 border border-teal-200 rounded-lg text-sm text-teal-700 space-y-2">
+          <h3 className="font-bold">Demo Credentials</h3>
+          <div className="flex items-center">
+            <div>
+              <span className="font-thin">Username:</span>{" "}
+              <span className="font-mono">emilys</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => copyToClipboard("emilys", "Username")}
+              aria-label="Copy username"
+            >
+              <ContentCopyIcon
+                fontSize="small"
+                className="cursor-pointer hover:text-teal-800 ml-2"
+              />
+            </button>
+          </div>
+          <div className="flex items-center">
+            <div>
+              <span className="font-thin">Password:</span>{" "}
+              <span className="font-mono">emilyspass</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => copyToClipboard("emilyspass", "Password")}
+              aria-label="Copy password"
+            >
+              <ContentCopyIcon
+                fontSize="small"
+                className="cursor-pointer hover:text-teal-800 ml-2"
+              />
+            </button>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
           <div className="relative">
             <input
               type="text"
@@ -93,11 +143,9 @@ export default function Login() {
             className="w-full py-2 rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
-              <div className="flex justify-center">
-                <div>
-                  <HashLoader color="#ffffff" size={20} />
-                </div>{" "}
-                <div className="ml-2">Please Wait</div>
+              <div className="flex justify-center items-center">
+                <HashLoader color="#ffffff" size={20} />
+                <span className="ml-2">Please Wait</span>
               </div>
             ) : (
               "Sign In"
