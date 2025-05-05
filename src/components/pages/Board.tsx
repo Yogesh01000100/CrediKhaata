@@ -319,13 +319,20 @@ export default function Dashboard() {
 
   const renderForm = () => {
     if (expandedForm === "customer") {
-      return <AddCustomerForm onSubmit={handleAddCustomer} />;
+      return (
+        <AddCustomerForm onSubmit={handleAddCustomer} closeModal={closeForm} />
+      );
     }
     if (expandedForm === "loan") {
-      return <AddLoanForm onSubmit={handleAddLoan} />;
+      return <AddLoanForm onSubmit={handleAddLoan} closeModal={closeForm} />;
     }
     if (expandedForm === "payment") {
-      return <RecordRepaymentForm onSubmit={handleAddRepayment} />;
+      return (
+        <RecordRepaymentForm
+          onSubmit={handleAddRepayment}
+          closeModal={closeForm}
+        />
+      );
     }
     return null;
   };
