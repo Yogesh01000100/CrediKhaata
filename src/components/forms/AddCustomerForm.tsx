@@ -1,32 +1,32 @@
-import { useState } from "react";
+import React from "react";
 
-export default function AddCustomerForm() {
-  const [name, setName] = useState("");
+type Props = {
+  onSubmit: () => void;
+};
 
+export default function AddCustomerForm({ onSubmit }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Add customer:", name);
-    // TODO: call API or update state
-    setName("");
+    onSubmit();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Customer Name
-        </label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="mt-1 w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
-        />
-      </div>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Customer Name"
+        required
+        className="block w-full border p-2 rounded mb-2"
+      />
+      <input
+        type="text"
+        placeholder="Phone Number"
+        required
+        className="block w-full border p-2 rounded mb-2"
+      />
       <button
         type="submit"
-        className="w-full bg-teal-600 text-white py-2 rounded-md hover:bg-teal-700 transition"
+        className="bg-teal-600 text-white px-4 py-2 rounded"
       >
         Add Customer
       </button>

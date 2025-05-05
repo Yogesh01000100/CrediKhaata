@@ -8,6 +8,14 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { exportCustomerPDF } from "../../utils/exportPdf";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 const mockCustomers = [
   {
@@ -208,6 +216,21 @@ export default function Dashboard() {
     setExpandedForm(null);
   };
 
+  const closeForm = () => setExpandedForm(null);
+
+  const renderForm = () => {
+    switch (expandedForm) {
+      case "customer":
+        return <AddCustomerForm onSubmit={closeForm} />;
+      case "loan":
+        return <AddLoanForm onSubmit={closeForm} />;
+      case "payment":
+        return <RecordRepaymentForm onSubmit={closeForm} />;
+      default:
+        return null;
+    }
+  };
+
   const renderCustomerCard = () => (
     <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg mb-6 transition-colors">
       <div className="flex items-start justify-between mb-6">
@@ -315,53 +338,6 @@ export default function Dashboard() {
     </div>
   );
 
-  const renderFormsSection = () => {
-    if (expandedForm) {
-      return (
-        <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow space-y-4 transition-colors">
-          <button
-            onClick={() => setExpandedForm(null)}
-            className="text-sm text-gray-600 dark:text-gray-400 hover:underline transition-colors"
-          >
-            ← Close Form
-          </button>
-          {expandedForm === "customer" && <AddCustomerForm />}
-          {expandedForm === "loan" && <AddLoanForm />}
-          {expandedForm === "payment" && <RecordRepaymentForm />}
-        </div>
-      );
-    }
-
-    return (
-      <div className="space-y-4">
-        <div
-          onClick={() => setExpandedForm("customer")}
-          className="cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow hover:shadow-lg transition-colors"
-        >
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100">
-            + Add Customer
-          </h3>
-        </div>
-        <div
-          onClick={() => setExpandedForm("loan")}
-          className="cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow hover:shadow-lg transition-colors"
-        >
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100">
-            + Add Loan
-          </h3>
-        </div>
-        <div
-          onClick={() => setExpandedForm("payment")}
-          className="cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow hover:shadow-lg transition-colors"
-        >
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100">
-            + Record Repayment
-          </h3>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-800 transition-colors">
       <main className="container mx-auto px-6 py-8 flex flex-col lg:flex-row lg:space-x-8">
@@ -434,11 +410,61 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <aside className="w-full lg:w-1/3 space-y-6">
-          {renderCustomerCard()}
-          {renderFormsSection()}
+        <aside className="w-full lg:w-1/3 flex flex-col justify-between h-full space-y-6">
+          <div>
+            {renderCustomerCard()}
+
+            <div className="flex flex-row space-x-4 mt-6">
+              <div
+                onClick={() => setExpandedForm("customer")}
+                className="flex-1 cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md transition-colors flex items-center space-x-2"
+              >
+                <PersonAddAltIcon className="text-teal-600 dark:text-teal-400" />
+                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-100">
+                  Add Customer
+                </h3>
+              </div>
+
+              <div
+                onClick={() => setExpandedForm("loan")}
+                className="flex-1 cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md transition-colors flex items-center space-x-2"
+              >
+                <MonetizationOnIcon className="text-teal-600 dark:text-teal-400" />
+                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-100">
+                  Add Loan
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <div
+            onClick={() => setExpandedForm("payment")}
+            className="cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md transition-colors flex items-center space-x-3"
+          >
+            <CurrencyRupeeIcon className="text-teal-600 dark:text-teal-400" />
+            <h3 className="text-md font-semibold text-gray-700 dark:text-gray-100">
+              Record Repayment
+            </h3>
+          </div>
         </aside>
       </main>
+
+      <Dialog
+        open={expandedForm !== null}
+        onClose={closeForm}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>
+          {expandedForm === "customer" && "Add New Customer"}
+          {expandedForm === "loan" && "Record New Loan"}
+          {expandedForm === "payment" && "Record Repayment"}
+        </DialogTitle>
+        <DialogContent dividers>{renderForm()}</DialogContent>
+        <DialogActions>
+          <Button onClick={closeForm}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
