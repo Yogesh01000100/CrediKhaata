@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Transaction } from "../pages/Board";
 
 type Props = {
   onSubmit: (loan: Transaction) => void;
+  closeModal?: () => void;
 };
 
 type LoanFormInputs = {
@@ -11,7 +13,7 @@ type LoanFormInputs = {
   dueDate: string;
 };
 
-export default function AddLoanForm({ onSubmit }: Props) {
+export default function AddLoanForm({ onSubmit, closeModal }: Props) {
   const {
     register,
     handleSubmit,
@@ -34,6 +36,8 @@ export default function AddLoanForm({ onSubmit }: Props) {
       status: dueTime < now ? "Overdue" : "Up-to-date",
     });
 
+    toast.success("Loan added successfully");
+    closeModal?.();
     reset();
   };
 
@@ -52,7 +56,7 @@ export default function AddLoanForm({ onSubmit }: Props) {
         type="number"
         {...register("amount", {
           required: "Amount is required",
-          min: { value: 1, message: "Enter a valid amount" },
+          min: { value: 1, message: "Enter valid amount" },
         })}
         placeholder="Amount"
         className="w-full border p-2 rounded"

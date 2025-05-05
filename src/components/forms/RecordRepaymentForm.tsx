@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Transaction } from "../pages/Board";
 
 type Props = {
   onSubmit: (repayment: Transaction) => void;
+  closeModal?: () => void;
 };
 
 type RepaymentFormInputs = {
@@ -10,7 +12,7 @@ type RepaymentFormInputs = {
   date: string;
 };
 
-export default function RecordRepaymentForm({ onSubmit }: Props) {
+export default function RecordRepaymentForm({ onSubmit, closeModal }: Props) {
   const {
     register,
     handleSubmit,
@@ -26,6 +28,9 @@ export default function RecordRepaymentForm({ onSubmit }: Props) {
       amount,
       date: data.date,
     });
+
+    toast.success("Repayment recorded");
+    closeModal?.();
     reset();
   };
 
@@ -35,7 +40,7 @@ export default function RecordRepaymentForm({ onSubmit }: Props) {
         type="number"
         {...register("amount", {
           required: "Amount is required",
-          min: { value: 1, message: "Enter a valid amount" },
+          min: { value: 1, message: "Enter valid amount" },
         })}
         placeholder="Repayment Amount"
         className="w-full border p-2 rounded"

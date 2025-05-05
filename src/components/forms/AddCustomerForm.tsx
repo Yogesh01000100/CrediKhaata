@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Customer } from "../pages/Board";
 
 type Props = {
   onSubmit: (newCustomer: Customer) => void;
+  closeModal?: () => void;
 };
 
 type CustomerFormInputs = {
@@ -12,7 +14,7 @@ type CustomerFormInputs = {
   address: string;
 };
 
-export default function AddCustomerForm({ onSubmit }: Props) {
+export default function AddCustomerForm({ onSubmit, closeModal }: Props) {
   const {
     register,
     handleSubmit,
@@ -34,12 +36,16 @@ export default function AddCustomerForm({ onSubmit }: Props) {
       status: "Up-to-date",
       transactions: [],
     };
+
     onSubmit(newCustomer);
+    toast.success("Customer added successfully");
+    closeModal?.();
     reset();
   };
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+      {/* inputs (same as before) */}
       <input
         {...register("name", { required: "Name is required" })}
         placeholder="Name"

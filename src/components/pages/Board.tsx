@@ -16,7 +16,6 @@ import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import PeopleIcon from "@mui/icons-material/People";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 export interface Transaction {
@@ -382,7 +381,7 @@ export default function Dashboard() {
         <section className="flex-1 mb-8 lg:mb-0">
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="group relative bg-white/60 dark:bg-gray-600/60 backdrop-blur-md p-5 rounded-xl shadow transition-all">
-              <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-teal-500 animate-ping" />
+              <div className="absolute top-3 right-3 w-1 h-1 rounded-full bg-teal-500 animate-ping" />
               <div className="flex items-center space-x-3">
                 <div className="px-2 py-1 rounded-full bg-teal-100 dark:bg-teal-900 group-hover:bg-teal-200 dark:group-hover:bg-teal-800 transition-colors">
                   <PeopleIcon className="text-teal-600 text-xl" />
@@ -391,7 +390,7 @@ export default function Dashboard() {
                   <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
                     Customers
                   </p>
-                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-100">
+                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-300">
                     {totalCustomers}
                   </p>
                 </div>
@@ -401,13 +400,13 @@ export default function Dashboard() {
             <div className="group relative bg-white/60 dark:bg-gray-600/60 backdrop-blur-md p-5 rounded-xl shadow transition-all">
               <div className="flex items-center space-x-3">
                 <div className="px-2 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900 group-hover:bg-yellow-200 dark:group-hover:bg-yellow-800 transition-colors">
-                  <MonetizationOnIcon className="text-yellow-600 text-xl" />
+                  <ReceiptLongIcon className="text-yellow-600 text-xl" />
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
                     Credit Given
                   </p>
-                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-100">
+                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-300">
                     ₹{totalCreditGiven}
                   </p>
                 </div>
@@ -423,7 +422,7 @@ export default function Dashboard() {
                   <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
                     Outstanding
                   </p>
-                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-100">
+                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-300">
                     ₹{totalOutstanding}
                   </p>
                 </div>
@@ -433,13 +432,13 @@ export default function Dashboard() {
             <div className="group relative bg-white/60 dark:bg-gray-600/60 backdrop-blur-md p-5 rounded-xl shadow transition-all">
               <div className="flex items-center space-x-3">
                 <div className="px-2 py-1 rounded-full bg-red-100 dark:bg-red-900 group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
-                  <WarningAmberIcon className="text-red-600 text-xl" />
+                  <WarningAmberIcon className="text-red-500 text-xl" />
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 font-medium">
                     Overdue
                   </p>
-                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-red-400">
+                  <p className="mt-0.5 text-xl sm:text-2xl font-bold text-teal-900 dark:text-gray-300">
                     ₹{totalOverdue}
                   </p>
                 </div>
@@ -510,7 +509,7 @@ export default function Dashboard() {
               onClick={() => setExpandedForm("customer")}
               className="flex-1 bg-teal-200 dark:bg-gray-700 px-2 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
             >
-              <PersonAddAltIcon className="text-teal-600 dark:text-teal-400" />
+              <PersonAddAltIcon className="text-teal-600 dark:text-teal-300" />
               <span className="font-medium text-gray-700 dark:text-gray-100">
                 Add Customer
               </span>
@@ -519,7 +518,7 @@ export default function Dashboard() {
               onClick={() => setExpandedForm("loan")}
               className="flex-1 bg-teal-200 dark:bg-gray-700 px-2 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
             >
-              <ReceiptLongIcon className="text-teal-600 dark:text-teal-400" />
+              <ReceiptLongIcon className="text-teal-600 dark:text-teal-300" />
               <span className="font-medium text-gray-700 dark:text-gray-100">
                 Add Loan
               </span>
@@ -530,7 +529,7 @@ export default function Dashboard() {
             onClick={() => setExpandedForm("payment")}
             className="bg-teal-200 dark:bg-gray-700 px-3 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
           >
-            <CurrencyRupeeIcon className="text-teal-600 dark:text-teal-400" />
+            <CurrencyRupeeIcon className="text-teal-600 dark:text-teal-300" />
             <span className="font-medium text-gray-700 dark:text-gray-100">
               Record Repayment
             </span>
