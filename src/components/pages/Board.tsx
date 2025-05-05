@@ -273,8 +273,8 @@ export default function Dashboard() {
   };
 
   const handleAddLoan = (loan: Transaction) => {
-    setCustomers((prev) =>
-      prev.map((c) =>
+    setCustomers((prev) => {
+      const updated = prev.map((c) =>
         c.id === selectedCustomer.id
           ? {
               ...c,
@@ -288,13 +288,18 @@ export default function Dashboard() {
                   : "Up-to-date",
             }
           : c
-      )
-    );
+      );
+      const updatedCustomer = updated.find((c) => c.id === selectedCustomer.id);
+      if (updatedCustomer) {
+        setSelectedCustomer(updatedCustomer);
+      }
+      return updated;
+    });
   };
 
   const handleAddRepayment = (repay: Transaction) => {
-    setCustomers((prev) =>
-      prev.map((c) =>
+    setCustomers((prev) => {
+      const updated = prev.map((c) =>
         c.id === selectedCustomer.id
           ? {
               ...c,
@@ -303,8 +308,13 @@ export default function Dashboard() {
               status: c.balance - repay.amount > 0 ? "Overdue" : "Up-to-date",
             }
           : c
-      )
-    );
+      );
+      const updatedCustomer = updated.find((c) => c.id === selectedCustomer.id);
+      if (updatedCustomer) {
+        setSelectedCustomer(updatedCustomer);
+      }
+      return updated;
+    });
   };
 
   const renderForm = () => {
