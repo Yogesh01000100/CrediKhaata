@@ -17,7 +17,30 @@ import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
-const mockCustomers = [
+export interface Transaction {
+  id: number;
+  type: "loan" | "repayment";
+  item?: string;
+  amount: number;
+  date?: string;
+  dueDate?: string;
+  status?: string;
+}
+
+export interface Customer {
+  id: number;
+  name: string;
+  contact: { email: string; phone: string };
+  address: string;
+  joinDate: string;
+  totalCredit: number;
+  balance: number;
+  dueDate: string;
+  status: string;
+  transactions: Transaction[];
+}
+
+const initialCustomers: Customer[] = [
   {
     id: 1,
     name: "Suresh",
@@ -197,38 +220,76 @@ const mockCustomers = [
     ],
   },
 ];
-
 type FormType = "customer" | "loan" | "payment" | null;
-type Customer = (typeof mockCustomers)[0];
 
 export default function Dashboard() {
-  const [expandedForm, setExpandedForm] = useState<FormType>(null);
+  const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>(
-    mockCustomers[0]
+    initialCustomers[0]
   );
+  const [expandedForm, setExpandedForm] = useState<FormType>(null);
 
-  const currentIndex = mockCustomers.findIndex(
-    (c) => c.id === selectedCustomer.id
-  );
+  const idx = customers.findIndex((c) => c.id === selectedCustomer.id);
 
-  const handleSelectCustomer = (c: Customer) => {
+  function handleSelectCustomer(c: Customer) {
     setSelectedCustomer(c);
     setExpandedForm(null);
-  };
+  }
+  function closeForm() {
+    setExpandedForm(null);
+  }
 
-  const closeForm = () => setExpandedForm(null);
+  function handleAddCustomer(newCust: Customer) {
+    setCustomers((prev) => [...prev, newCust]);
+    setSelectedCustomer(newCust);
+  }
+
+  function handleAddLoan(loan: Transaction) {
+    setCustomers((prev) =>
+      prev.map((c) =>
+        c.id === selectedCustomer.id
+          ? {
+              ...c,
+              transactions: [...c.transactions, loan],
+              totalCredit: c.totalCredit + loan.amount,
+              balance: c.balance + loan.amount,
+              dueDate: loan.dueDate ?? c.dueDate,
+              status:
+                new Date(loan.dueDate ?? "").getTime() < Date.now()
+                  ? "Overdue"
+                  : "Up-to-date",
+            }
+          : c
+      )
+    );
+  }
+
+  function handleAddRepayment(repay: Transaction) {
+    setCustomers((prev) =>
+      prev.map((c) =>
+        c.id === selectedCustomer.id
+          ? {
+              ...c,
+              transactions: [...c.transactions, repay],
+              balance: c.balance - repay.amount,
+              status: c.balance - repay.amount > 0 ? "Overdue" : "Up-to-date",
+            }
+          : c
+      )
+    );
+  }
 
   const renderForm = () => {
-    switch (expandedForm) {
-      case "customer":
-        return <AddCustomerForm onSubmit={closeForm} />;
-      case "loan":
-        return <AddLoanForm onSubmit={closeForm} />;
-      case "payment":
-        return <RecordRepaymentForm onSubmit={closeForm} />;
-      default:
-        return null;
+    if (expandedForm === "customer") {
+      return <AddCustomerForm onSubmit={handleAddCustomer} />;
     }
+    if (expandedForm === "loan") {
+      return <AddLoanForm onSubmit={handleAddLoan} />;
+    }
+    if (expandedForm === "payment") {
+      return <RecordRepaymentForm onSubmit={handleAddRepayment} />;
+    }
+    return null;
   };
 
   const renderCustomerCard = () => (
@@ -251,11 +312,10 @@ export default function Dashboard() {
             </span>
           </div>
         </div>
-
         <div className="flex space-x-2">
           <button
-            onClick={() => setSelectedCustomer(mockCustomers[currentIndex - 1])}
-            disabled={currentIndex <= 0}
+            onClick={() => handleSelectCustomer(customers[idx - 1])}
+            disabled={idx <= 0}
             className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
           >
             <ChevronLeftIcon
@@ -264,8 +324,8 @@ export default function Dashboard() {
             />
           </button>
           <button
-            onClick={() => setSelectedCustomer(mockCustomers[currentIndex + 1])}
-            disabled={currentIndex >= mockCustomers.length - 1}
+            onClick={() => handleSelectCustomer(customers[idx + 1])}
+            disabled={idx >= customers.length - 1}
             className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
           >
             <ChevronRightIcon
@@ -278,57 +338,50 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700 dark:text-gray-300">
         <div className="space-y-2">
-          <p className="text-sm">
-            <span className="font-medium">Joined:</span>{" "}
-            {selectedCustomer.joinDate}
+          <p>
+            <strong>Joined:</strong> {selectedCustomer.joinDate}
           </p>
-          <p className="text-sm">
-            <span className="font-medium">Phone:</span>{" "}
-            {selectedCustomer.contact.phone}
+          <p>
+            <strong>Phone:</strong> {selectedCustomer.contact.phone}
           </p>
-          <p className="text-sm">
-            <span className="font-medium">Address:</span>{" "}
-            {selectedCustomer.address}
+          <p>
+            <strong>Address:</strong> {selectedCustomer.address}
           </p>
         </div>
         <div className="space-y-2">
-          <p className="text-sm">
-            <span className="font-medium">Total Credit:</span> ₹
-            {selectedCustomer.totalCredit}
+          <p>
+            <strong>Total Credit:</strong> ₹{selectedCustomer.totalCredit}
           </p>
-          <p className="text-sm">
-            <span className="font-medium">Next Due:</span>{" "}
-            {selectedCustomer.dueDate}
+          <p>
+            <strong>Next Due:</strong> {selectedCustomer.dueDate}
           </p>
         </div>
       </div>
 
-      <div className="mt-3">
-        <button
-          onClick={() => exportCustomerPDF(selectedCustomer)}
-          className="flex items-center bg-teal-600 text-white px-2 py-1.5 rounded-lg text-sm hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 transition-colors"
-        >
-          <PictureAsPdfIcon fontSize="small" className="mr-2" />
-          Export
-        </button>
-      </div>
+      <button
+        onClick={() => exportCustomerPDF(selectedCustomer)}
+        className="mt-4 flex items-center bg-teal-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 transition-colors"
+      >
+        <PictureAsPdfIcon fontSize="small" className="mr-2" />
+        Export
+      </button>
 
       <hr className="border-t-2 border-dashed border-gray-300 dark:border-gray-600 my-5" />
 
-      <div className="mt-4">
-        <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div>
+        <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
           Transactions
         </h4>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700 text-gray-700 dark:text-gray-300">
           {selectedCustomer.transactions.map((t) => (
-            <li key={t.id} className="py-1">
-              <div className="flex justify-between items-center">
+            <li key={t.id} className="py-2">
+              <div className="flex justify-between">
                 <span className="font-medium">
                   {t.type === "loan" ? t.item : "Repayment"}
                 </span>
-                <span className="text-sm">₹{t.amount}</span>
+                <span>₹{t.amount}</span>
               </div>
-              <div className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
                 {t.type === "loan" ? `Due ${t.dueDate}` : `On ${t.date}`}
               </div>
             </li>
@@ -380,26 +433,25 @@ export default function Dashboard() {
                   </th>
                 </tr>
               </thead>
-
-              <tbody className="bg-white dark:bg-gray-700 divide-y divide-gray-200 dark:divide-gray-600 transition-colors">
-                {mockCustomers.map((c) => (
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                {customers.map((c) => (
                   <tr
                     key={c.id}
                     onClick={() => handleSelectCustomer(c)}
-                    className="cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
+                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                   >
-                    <td className="px-6 py-4 text-teal-700 dark:text-teal-300 font-semibold">
+                    <td className="px-6 py-3 font-semibold text-teal-700 dark:text-teal-300">
                       {c.name}
                     </td>
-                    <td className="px-6 py-4 text-gray-700 dark:text-gray-300 font-medium">
+                    <td className="px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
                       ₹{c.balance}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-sm hidden sm:table-cell">
+                    <td className="px-6 py-3 text-sm text-gray-500 dark:text-gray-400 hidden sm:table-cell">
                       {c.dueDate}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       <span
-                        className={`inline-flex items-center px-1.5 py-1 text-xs font-semibold rounded-full ${
+                        className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full ${
                           c.status === "Overdue"
                             ? "bg-orange-100 text-orange-700 dark:bg-orange-200 dark:text-orange-700"
                             : "bg-green-100 text-green-700 dark:bg-green-200 dark:text-green-700"
@@ -415,41 +467,38 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <aside className="w-full lg:w-1/3 flex flex-col justify-between h-full space-y-6">
-          <div>
-            {renderCustomerCard()}
+        <aside className="w-full lg:w-1/3 space-y-6">
+          {renderCustomerCard()}
 
-            <div className="flex flex-row space-x-4 mt-6">
-              <div
-                onClick={() => setExpandedForm("customer")}
-                className="flex-1 cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md transition-colors flex items-center space-x-2"
-              >
-                <PersonAddAltIcon className="text-teal-600 dark:text-teal-400" />
-                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-100">
-                  Add Customer
-                </h3>
-              </div>
-
-              <div
-                onClick={() => setExpandedForm("loan")}
-                className="flex-1 cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md transition-colors flex items-center space-x-2"
-              >
-                <MonetizationOnIcon className="text-teal-600 dark:text-teal-400" />
-                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-100">
-                  Add Loan
-                </h3>
-              </div>
+          <div className="flex space-x-4">
+            <div
+              onClick={() => setExpandedForm("customer")}
+              className="flex-1 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-center space-x-2 transition-colors cursor-pointer"
+            >
+              <PersonAddAltIcon className="text-teal-600 dark:text-teal-400" />
+              <span className="font-medium text-gray-700 dark:text-gray-100">
+                Add Customer
+              </span>
+            </div>
+            <div
+              onClick={() => setExpandedForm("loan")}
+              className="flex-1 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex items-center space-x-2 transition-colors cursor-pointer"
+            >
+              <MonetizationOnIcon className="text-teal-600 dark:text-teal-400" />
+              <span className="font-medium text-gray-700 dark:text-gray-100">
+                Add Loan
+              </span>
             </div>
           </div>
 
           <div
             onClick={() => setExpandedForm("payment")}
-            className="cursor-pointer bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md transition-colors flex items-center space-x-3"
+            className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
           >
             <CurrencyRupeeIcon className="text-teal-600 dark:text-teal-400" />
-            <h3 className="text-md font-semibold text-gray-700 dark:text-gray-100">
+            <span className="font-medium text-gray-700 dark:text-gray-100">
               Record Repayment
-            </h3>
+            </span>
           </div>
         </aside>
       </main>
