@@ -22,7 +22,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="flex flex-col w-full md:w-56 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors">
+    <aside className="flex flex-col w-full md:w-56 bg-teal-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-colors">
       <nav className="flex-1 px-4 py-6 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map(({ to, label, icon: Icon }) => (
@@ -33,8 +33,8 @@ export default function Sidebar() {
                   `flex items-center px-4 py-2 rounded-lg transition-colors
                    ${
                      isActive
-                       ? "bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300"
-                       : "text-gray-700 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-700 hover:text-teal-700 dark:hover:text-white"
+                       ? "bg-teal-200 dark:bg-teal-900 text-teal-700 dark:text-teal-300"
+                       : "text-gray-700 dark:text-gray-300 hover:bg-teal-100 dark:hover:bg-teal-950 hover:text-teal-700 dark:hover:text-white"
                    }`
                 }
               >
@@ -46,22 +46,25 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      <div className="mx-4 my-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow px-4 py-3 space-y-2">
-        <div className="flex items-center space-x-2">
-          <InfoOutlinedIcon className="text-teal-600" fontSize="small" />
-          <h4 className="text-teal-700 dark:text-teal-300 font-semibold text-sm">
-            Welcome to CrediKhaata!
+      <div className="w-3/4 mx-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow p-3 space-y-2">
+        <div className="flex items-center space-x-1">
+          <InfoOutlinedIcon
+            className="text-teal-600 dark:text-teal-400"
+            fontSize="small"
+          />
+          <h4 className="text-left text-teal-700 dark:text-teal-300 font-medium text-sm">
+            welcome user
           </h4>
         </div>
-        <p className="text-gray-700 dark:text-gray-300 text-xs leading-snug">
+        <p className="text-gray-700 dark:text-gray-300 text-xs font-thin leading-snug">
           Your one-stop ledger for tracking credit sales and repayments.
         </p>
       </div>
 
-      <div className="px-4 py-6">
+      <div className="p-4">
         <button
           onClick={handleLogout}
-          className="flex items-center justify-center w-full px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-400 hover:text-red-500 dark:hover:text-white transition-colors"
+          className="flex items-center justify-center px-3 py-2 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-400 hover:text-red-500 dark:hover:text-white transition-colors"
         >
           <LogoutIcon className="mr-2" fontSize="small" />
           Log out

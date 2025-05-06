@@ -45,7 +45,6 @@ export default function AddCustomerForm({ onSubmit, closeModal }: Props) {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-      {/* inputs (same as before) */}
       <input
         {...register("name", { required: "Name is required" })}
         placeholder="Name"

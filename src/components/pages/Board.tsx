@@ -76,7 +76,7 @@ const initialCustomers: Customer[] = [
     totalCredit: 2500,
     balance: 0,
     dueDate: "2025-05-10",
-    status: "Up-to-date",
+    status: "Updated",
     transactions: [
       {
         id: 201,
@@ -116,7 +116,7 @@ const initialCustomers: Customer[] = [
         amount: 50,
         date: "2025-04-15",
         dueDate: "2025-05-15",
-        status: "Up-to-date",
+        status: "Updated",
       },
     ],
   },
@@ -129,7 +129,7 @@ const initialCustomers: Customer[] = [
     totalCredit: 3200,
     balance: 1200,
     dueDate: "2025-06-01",
-    status: "Up-to-date",
+    status: "Updated",
     transactions: [
       {
         id: 401,
@@ -138,7 +138,7 @@ const initialCustomers: Customer[] = [
         amount: 1200,
         date: "2025-05-01",
         dueDate: "2025-06-01",
-        status: "Up-to-date",
+        status: "Updated",
       },
     ],
   },
@@ -151,7 +151,7 @@ const initialCustomers: Customer[] = [
     totalCredit: 0,
     balance: 0,
     dueDate: "—",
-    status: "Up-to-date",
+    status: "Updated",
     transactions: [],
   },
   {
@@ -163,7 +163,7 @@ const initialCustomers: Customer[] = [
     totalCredit: 700,
     balance: 300,
     dueDate: "2025-05-07",
-    status: "Up-to-date",
+    status: "Updated",
     transactions: [
       {
         id: 601,
@@ -172,7 +172,7 @@ const initialCustomers: Customer[] = [
         amount: 300,
         date: "2025-04-07",
         dueDate: "2025-05-07",
-        status: "Up-to-date",
+        status: "Updated",
       },
     ],
   },
@@ -285,7 +285,7 @@ export default function Dashboard() {
               status:
                 new Date(loan.dueDate ?? "").getTime() < Date.now()
                   ? "Overdue"
-                  : "Up-to-date",
+                  : "Updated",
             }
           : c
       );
@@ -305,7 +305,7 @@ export default function Dashboard() {
               ...c,
               transactions: [...c.transactions, repay],
               balance: c.balance - repay.amount,
-              status: c.balance - repay.amount > 0 ? "Overdue" : "Up-to-date",
+              status: c.balance - repay.amount > 0 ? "Overdue" : "Updated",
             }
           : c
       );
@@ -338,7 +338,7 @@ export default function Dashboard() {
   };
 
   const renderCustomerCard = () => (
-    <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg mb-6 transition-colors">
+    <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow mb-6 transition-colors">
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center space-x-3">
           <AccountCircleIcon className="text-teal-600" fontSize="large" />
@@ -525,18 +525,18 @@ export default function Dashboard() {
 
           <div className="overflow-x-auto bg-white dark:bg-gray-700 rounded-lg shadow transition-colors">
             <table className="min-w-full">
-              <thead className="bg-teal-100 dark:bg-teal-800">
+              <thead className="bg-teal-200 dark:bg-teal-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300">
+                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-700 dark:text-teal-300">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300">
+                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-700 dark:text-teal-300">
                     Balance
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300 hidden sm:table-cell">
+                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-700 dark:text-teal-300 hidden sm:table-cell">
                     Next Due
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-600 dark:text-teal-300">
+                  <th className="px-6 py-3 text-left text-sm font-medium text-teal-700 dark:text-teal-300">
                     Status
                   </th>
                 </tr>
@@ -581,18 +581,18 @@ export default function Dashboard() {
           <div className="flex space-x-6">
             <div
               onClick={() => setExpandedForm("customer")}
-              className="flex-1 bg-teal-200 dark:bg-gray-700 px-2 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
+              className="flex-1 bg-teal-200 dark:bg-teal-700 hover:dark:bg-teal-600 px-2 py-2 rounded-lg shadow flex justify-center items-center space-x-2 transition-colors cursor-pointer"
             >
-              <PersonAddAltIcon className="text-teal-600 dark:text-teal-300" />
+              <PersonAddAltIcon className="text-teal-700 dark:text-teal-300" />
               <span className="font-medium text-gray-700 dark:text-gray-100">
                 Add Customer
               </span>
             </div>
             <div
               onClick={() => setExpandedForm("loan")}
-              className="flex-1 bg-teal-200 dark:bg-gray-700 px-2 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
+              className="flex-1 bg-teal-200 dark:bg-teal-700 hover:dark:bg-teal-600 px-2 py-2 rounded-lg shadow flex justify-center items-center space-x-2 transition-colors cursor-pointer"
             >
-              <ReceiptLongIcon className="text-teal-600 dark:text-teal-300" />
+              <ReceiptLongIcon className="text-teal-700 dark:text-teal-300" />
               <span className="font-medium text-gray-700 dark:text-gray-100">
                 Add Loan
               </span>
@@ -601,9 +601,9 @@ export default function Dashboard() {
 
           <div
             onClick={() => setExpandedForm("payment")}
-            className="bg-teal-200 dark:bg-gray-700 px-3 py-2 rounded-lg shadow-md flex justify-center items-center space-x-2 transition-colors cursor-pointer"
+            className="bg-teal-200 dark:bg-teal-700 hover:dark:bg-teal-600 px-3 py-2.5 rounded-lg shadow flex justify-center items-center space-x-2 transition-colors cursor-pointer"
           >
-            <CurrencyRupeeIcon className="text-teal-600 dark:text-teal-300" />
+            <CurrencyRupeeIcon className="text-teal-700 dark:text-teal-300" />
             <span className="font-medium text-gray-700 dark:text-gray-100">
               Record Repayment
             </span>

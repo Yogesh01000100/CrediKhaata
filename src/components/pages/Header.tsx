@@ -42,7 +42,7 @@ export default function Header() {
             flex items-center justify-center
             h-8 w-8
             rounded-full
-            bg-teal-500 dark:bg-gray-500
+            bg-slate-300 hover:bg-slate-400 dark:bg-orange-400 hover:dark:bg-orange-300
             transition-colors
           "
           aria-label="Toggle theme"
@@ -57,13 +57,13 @@ export default function Header() {
         <div className="hidden md:inline-flex">
           <AccountCircleIcon
             fontSize="large"
-            className="text-white dark:text-gray-300 cursor-pointer hover:text-teal-100 dark:hover:text-gray-100 transition-colors"
+            className="text-white dark:text-gray-200 cursor-pointer hover:text-teal-100 dark:hover:text-gray-100 transition-colors"
           />
         </div>
 
         <button
           onClick={handleLogout}
-          className="flex items-center justify-center h-8 w-10 rounded-full bg-red-400 hover:bg-red-300 transition-colors md:hidden"
+          className="flex items-center justify-center h-8 w-9 rounded-lg bg-red-400 hover:bg-red-500 transition-colors md:hidden"
           aria-label="Logout"
         >
           <ExitToAppIcon className="text-white" fontSize="small" />
